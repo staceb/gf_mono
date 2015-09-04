@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>gf1</Name>
+    <RootNamespace>gf1</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>bc43548e-b025-4412-b567-a3289110e3d4</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>bin\www</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <ProjectView>ShowAllFiles</ProjectView>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="app.js" />
+    <Compile Include="app_api\routes\index.js" />
+    <Compile Include="app_client\app.js" />
+    <Compile Include="app_client\lib\angular-cache.min.js" />
+    <Compile Include="app_client\lib\angular-route.min.js" />
+    <Compile Include="app_client\lib\angular.min.js" />
+    <Compile Include="app_client\controller\backtest\backtest.controller.js" />
+    <Compile Include="app_server\db\sector\sector.js" />
+    <Compile Include="app_server\db\sector\find\all.js" />
+    <Compile Include="app_server\db\sector\find\byId.js" />
+    <Compile Include="app_server\db\sector\find\byName.js" />
+    <Compile Include="app_server\db\sector\insert\bulk.js" />
+    <Compile Include="app_server\db\sector\insert\one.js" />
+    <Compile Include="app_server\db\sector\remove\all.js" />
+    <Compile Include="app_server\db\sector\remove\byId.js" />
+    <Compile Include="app_server\db\exchange\exchange.js" />
+    <Compile Include="app_server\db\db.js" />
+    <Compile Include="app_server\db\exchange\find\all.js" />
+    <Compile Include="app_server\db\exchange\find\byId.js" />
+    <Compile Include="app_server\db\exchange\find\byName.js" />
+    <Compile Include="app_server\db\exchange\insert\bulk.js" />
+    <Compile Include="app_server\db\exchange\insert\one.js" />
+    <Compile Include="app_server\db\exchange\remove\all.js" />
+    <Compile Include="app_server\db\exchange\remove\byId.js" />
+    <Compile Include="routes\index.js" />
+    <Compile Include="bin\www" />
+    <Compile Include="spec\exchange-spec.js" />
+    <Compile Include="spec\sector-spec.js" />
+    <Content Include="app_client\index.html" />
+    <Content Include="app_client\lib\angular-route.min.js.map" />
+    <Content Include="app_client\controller\backtest\backtest.template.html" />
+    <Content Include="package.json" />
+    <Content Include="public\stylesheets\style.styl" />
+    <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app_api\routes\" />
+    <Folder Include="app_client\lib\" />
+    <Folder Include="app_client\controller\" />
+    <Folder Include="app_client\controller\backtest\" />
+    <Folder Include="app_server\db\sector\" />
+    <Folder Include="app_server\db\sector\find\" />
+    <Folder Include="app_server\db\sector\insert\" />
+    <Folder Include="app_server\db\sector\remove\" />
+    <Folder Include="app_server\db\" />
+    <Folder Include="app_server\db\exchange\" />
+    <Folder Include="app_server\db\exchange\insert\" />
+    <Folder Include="app_server\db\exchange\find\" />
+    <Folder Include="app_server\db\exchange\remove\" />
+    <Folder Include="bin\" />
+    <Folder Include="app_client\" />
+    <Folder Include="app_server\" />
+    <Folder Include="app_api\" />
+    <Folder Include="spec\" />
+    <Folder Include="public\" />
+    <Folder Include="public\images\" />
+    <Folder Include="public\javascripts\" />
+    <Folder Include="public\stylesheets\" />
+    <Folder Include="routes\" />
+  </ItemGroup>
+  <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
