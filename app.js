@@ -25,7 +25,7 @@ require('./app_api/routes')(app);
 
 
 app.use(function (req, res) {
-    
+
     res.sendFile(path.join(__dirname, 'app_client', 'index.html'));
 });
 

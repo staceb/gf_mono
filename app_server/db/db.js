@@ -3,13 +3,15 @@ var Q = require('q');
 var gracefulShutdown;
 var mysql = require("mysql");
 
+var config = require("../../config.js");
+
 var pool = mysql.createPool({
-    host     : //host//,
-    user     : //user//,
-    password : //password//,
-    database: //database//,
-    connectionLimit :  500,
-    debug: false
+    host     : config.host,
+    user     : config.user,
+    password : config.dbPass,
+    database: config.database,
+    connectionLimit : config.connectionLimit,
+    debug: config.debug
 });
 
 
