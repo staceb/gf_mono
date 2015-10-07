@@ -11,6 +11,7 @@ var Q = require('q');
 describe('get latest stocks from csv and save docs', function () {
 
   var con;
+  var tempAverage = [];
   var tempStock = [];
   var stockInsert = [];
   var averages = [];
@@ -24,28 +25,24 @@ describe('get latest stocks from csv and save docs', function () {
 
     })
     .then(function (c) {
-    //    console.log('1 CALLED!')
-        con = c;
 
+        con = c;
         return symbol.find.all(con);
 
     })
     .then(function (d) {
 
-    //   console.log('2 CALLED!')
         var s = d[0];
         var promises = [];
 
         d.map(function(i){
 
-        //   console.log('2.1 CALLED!:'+i.SYMBOL)
             var deferred = Q.defer();
             promises.push(deferred.promise);
 
             weekly_average.find.bySymbol(con, i.SYMBOL)
             .then(function(d){
 
-        //           console.log('2.2 CALLED!:'+i.SYMBOL)
                 var fromDate = new Date(1980, 0, 29);
                 var pastDoc = null;
 
@@ -58,20 +55,17 @@ describe('get latest stocks from csv and save docs', function () {
 
                 var qs = { symbol: i.SYMBOL , fromDate: fromDate , toDate: new Date(), frequency: 'w' };
                 var url = yahoo.buildUrl(qs);
-          //      console.log(url);
 
                 return Q.all([yahoo.historicalQuotes(url, i.SYMBOL), pastDoc]);
 
             })
             .then(function(d){
 
-            //      console.log('2.3 CALLED!'+d[0][0].symbol)
                   return stats.calcStats(d[0], d[1] , 'w');
 
             })
             .then(function(d){
 
-              //    console.log('2.4 CALLED!'+d[0][0][0]);
                   if(tempStock.length < 1000){
 
                     tempStock = tempStock.concat(d[0]);
@@ -84,8 +78,6 @@ describe('get latest stocks from csv and save docs', function () {
 
                   }
 
-
-
                   var s =  d[1].data.map(function(r) {
 
                       var t = [d[1].symbol, d[1].date, r.col, r.arraySMA.join(','), r.sumSMA , r.arrayRTN.join(","), r.sumRTN, r.i]
@@ -95,7 +87,6 @@ describe('get latest stocks from csv and save docs', function () {
 
                   symbols = symbols.concat(d[0][0][0]);
                   averages = averages.concat(s);
-                //    console.log('2.4 CALLED end!')
                   deferred.resolve();
 
             //      return Q.all([weekly_stock.insert.bulk(con, d[0]), d[1], d[0][0][0]]);
@@ -104,38 +95,14 @@ describe('get latest stocks from csv and save docs', function () {
           .catch(function (err) {
 
               console.log('promise returned error:'+i.SYMBOL+' '+err);
-                deferred.resolve();
+              deferred.resolve();
             //  done();
 
           });
-          //   .then(function(d){
-          //
-          // //        return Q.all([weekly_average.remove.bySymbolMany(con, d[2]), d[1]]);
-          //
-          //   })
-          //   .then(function (d) {
-          //
-          //      var s =  d[1].data.map(function(r) {
-          //          var t = [d[1].symbol, d[1].date, r.col, r.arraySMA.join(','), r.sumSMA , r.arrayRTN.join(","), r.sumRTN, r.i]
-          //   //       console.log('t:'+JSON.stringify(t));
-          //          return t
-          //
-          //        });
-          //
-          //       return weekly_average.insert.bulk(con, s);
-          //
-          //  })
-          //  .then(function (d) {
-          //
-          //      deferred.resolve(d);
-          //  });
-
-      //     console.log('defered:'+ promises);
-
 
         });
 
-          return Q.all(promises);
+        return Q.all(promises);
 
 
     })
