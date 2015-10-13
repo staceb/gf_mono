@@ -60,5 +60,11 @@ app.use(function (err, req, res, next) {
     });
 });
 
+process.on('uncaughtException', function () {
+   console.log('Caught exception: ' + err);
+   console.log(err.stack);
+
+});
+
 
 module.exports = app;

@@ -37,8 +37,18 @@ module.exports.getConnection = function (){
 }
 
 pool.on('connection', function (connection) {
+    console.log('MySQL connected:'+connection.threadId);
+});
 
-    console.log('MySQL connected');
+pool.on('remove', function (id) {
+
+   console.log('[DB] Lost connection to database host', id);
+   setTimeout(function() {
+   console.log('[DB] Re-adding host', id);
+   cluster.add(id, hosts[id]);
+}, 20000);
+
+
 });
 
 
@@ -62,7 +72,6 @@ if (process.platform === "win32") {
 gracefulShutdown = function (msg, callback) {
 
     pool.end(function () {
-
         console.log('MySQL disconnected through ' + msg);
         callback();
     });

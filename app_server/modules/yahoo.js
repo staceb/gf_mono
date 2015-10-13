@@ -2,6 +2,7 @@
 var csv = require('csv-stream');
 var fs = require('fs');
 var Q = require('q');
+var config = require("../../config.js");
 
 module.exports.buildUrl = function (query) {
 
@@ -65,14 +66,12 @@ module.exports.historicalQuotes = function (url, symbol) {
     var deferred = Q.defer();
     var csvStream = csv.createStream();
     var docs = [];
-
+    var yReq = config.feed;
+    yReq.url = url;
 
     if (url && symbol) {
 
-        request({
-            url: url
-            
-        }, function (err, res, body) {
+        request( yReq , function (err, res, body) {
 
             if (!err && res.statusCode == 200 && body) {
 
@@ -117,5 +116,20 @@ module.exports.historicalQuotes = function (url, symbol) {
     }
 
     return deferred.promise;
+
+}
+
+// calculates from date for Yahoo feed weekly stocks
+module.exports.getNextDateWeekly = function(row){
+
+    if(row && row[0].DATE){
+
+      var day = 8 - d[0].date.getDay();
+      return new Date(d.date.getTime() + (86400000 * day));
+    }
+    else{
+
+      return  new Date(1980, 0, 29);
+    }
 
 }

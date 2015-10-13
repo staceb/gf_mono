@@ -8,7 +8,6 @@ module.exports = function (c, symbol) {
     if (c && symbol) {
 
         c.query('SELECT * FROM weekly_stocks_average WHERE SYMBOL = ? ORDER BY SYMBOL, DATE, PERIOD', symbol ,function (err, result) {
-          console.log('RESULT:'+ result);
             if (!err) {
 
               if(result && result.length > 0){
@@ -31,13 +30,11 @@ module.exports = function (c, symbol) {
 
               }
               else{
-
                 deferred.resolve(null);
               }
 
             }
             else {
-
                 deferred.reject(err);
             }
 
@@ -48,6 +45,7 @@ module.exports = function (c, symbol) {
 
         deferred.reject('symbol.find.bySymbol: SQL Connection and id  mandatory');
     }
+
 
 
     return deferred.promise;
