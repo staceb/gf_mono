@@ -5,26 +5,27 @@ module.exports = function (c, symbol) {
 
     var deferred = Q.defer();
 
-    if (c && symbol) {
+      if (c && symbol) {
 
-        c.query('DELETE FROM weekly_stocks_average WHERE SYMBOL = ?', symbol , function (err, result) {
+          c.query('DELETE FROM weekly_stocks_average WHERE SYMBOL = ?', symbol , function (err, result) {
 
-            if (!err) {
+              if (!err) {
 
-                deferred.resolve(result);
-            }
-            else {
+                  deferred.resolve(result);
+              }
+              else {
 
-                deferred.reject(err);
-            }
+                  console.log('remove error:'+err);
+                  deferred.reject(err);
+              }
 
-        });
+          });
 
-    }
-    else {
+      }
+      else {
 
-        deferred.reject('exchange.delete.byId: SQL Connection and id mandatory');
-    }
+          deferred.reject('exchange.delete.byId: SQL Connection and id mandatory');
+      }
 
 
     return deferred.promise;

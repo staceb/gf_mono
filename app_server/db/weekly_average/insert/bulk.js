@@ -5,26 +5,22 @@ module.exports = function (c, rows) {
 
     var deferred = Q.defer();
 
-    if (c && rows) {
+       if (c && rows) {
+          c.query("INSERT INTO weekly_stocks_average (SYMBOL, DATE, COL, ARR_SMA, SUM_SMA,ARR_RTN, SUM_RTN, PERIOD) VALUES ?", [rows] , function (err, result) {
 
-        c.query("INSERT INTO weekly_stocks_average (SYMBOL, DATE, COL, ARR_SMA, SUM_SMA,ARR_RTN, SUM_RTN, PERIOD) VALUES ?", [rows] , function (err, result) {
+              if (!err) {
+                  deferred.resolve(result);
+              }
+              else {
+                  deferred.reject(err);
+              }
 
-            if (!err) {
+          });
+       }
+       else {
 
-                deferred.resolve(result);
-            }
-            else {
-
-                deferred.reject(err);
-            }
-
-        });
-    }
-    else {
-
-        deferred.reject('weekly_stocks_average.insert.bulk: SQL Connections and records to insert mandatory');
-
-    }
+           deferred.reject('weekly_stocks_average.insert.bulk: SQL Connections and records to insert mandatory');
+       }
 
     return deferred.promise;
 }
