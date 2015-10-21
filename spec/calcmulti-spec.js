@@ -21,7 +21,9 @@ describe('get latest stocks from csv and save docs', function () {
     .then(function(c){
 
         con = c;
-        return symbol.find.all(con);
+  //      return symbol.find.all(con);
+
+        return [{SYMBOL: 'AEM'}];
     })
     .then(function(d){
 
@@ -42,7 +44,7 @@ describe('get latest stocks from csv and save docs', function () {
 
             var qs = { symbol: i.SYMBOL , fromDate: fromDate , toDate: new Date(), frequency: 'w' };
             var url = yahoo.buildUrl(qs);
-//console.log(url);
+console.log(url);
             return Q.all([yahoo.historicalQuotes(url, i.SYMBOL), latestDoc]);
 
           })
@@ -53,12 +55,28 @@ describe('get latest stocks from csv and save docs', function () {
                   return stats.calcStats(d[0], d[1] , 'w');
               }
               else{
+
                     deferred.resolve();
               }
 
+
+
+
           })
           .then(function(d){
-
+            // console.log('SIGNAL'+d[0][1][84])
+            //   console.log('SHARES_BOUGHT'+d[0][1][85])
+            //     console.log('VALUE_BOUGHT'+d[0][1][86])
+            //       console.log('TOTAL_BOUGHT'+d[0][1][87])
+            //         console.log('TOTAL_SHARES'+d[0][1][88])
+            //           console.log('SHARES_SOLD'+d[0][1][89])
+            //             console.log('VALUE_SOLD'+d[0][1][90])
+            //               console.log('GAIN_ABS_TOTAL'+d[0][1][91])
+            //                 console.log('GAIN_PER_TOTAL'+d[0][1][92])
+            //                   console.log('PORTFOLIO_VAL'+d[0][1][93])
+            //                     console.log('PORTFOLIO_RETURN'+d[0][1][94])
+              // console.log(d[0][0].length)
+        //       console.log(JSON.stringify(d[0][0]));
               return Q.all([weekly_stock.insert.bulk(con, d[0]), d[1]]);
 
           })
@@ -83,6 +101,7 @@ describe('get latest stocks from csv and save docs', function () {
           })
           .catch(function(err){
 
+                console.log(err)
                 deferred.resolve();
           });
 

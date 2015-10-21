@@ -39,13 +39,14 @@ module.exports.round = function (value, exp) {
     exp = +exp;
 
     if (typeof exp === 'undefined' || +exp === 0) {
+
         return Math.round(value);
 
     }
 
     if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
 
-        return NaN;
+        return 'NaN';
     }
 
     // Shift

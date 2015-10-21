@@ -74,7 +74,7 @@ module.exports.historicalQuotes = function (url, symbol) {
         request( yReq , function (err, res, body) {
 
             if (!err && res.statusCode == 200 && body) {
-
+                console.log('yahoo done:'+symbol)
                 var data = body.split('\n');
 
                 data.shift();
@@ -84,18 +84,20 @@ module.exports.historicalQuotes = function (url, symbol) {
                     var doc = d.split(',');
 
                     if (doc[4] && doc[4] > 0) {
-                        docs.push({
-                            symbol: symbol,
-                            date: new Date(doc[0]),
-                            open: doc[1],
-                            high: doc[2],
-                            low: doc[3],
-                            close: doc[4],
-                            volume: doc[5],
-                            adjclose: doc[6],
-                            month: new Date(doc[0]).getMonth(),
-                            year: new Date(doc[0]).getFullYear()
-                        });
+
+                      docs.unshift([
+                          symbol,
+                          doc[0],
+                          doc[1],
+                          doc[2],
+                          doc[3],
+                          doc[4],
+                          doc[5],
+                          doc[6],
+                          new Date(doc[0]).getMonth(),
+                          new Date(doc[0]).getFullYear()
+                      ]);
+
                     }
 
                 });
@@ -104,7 +106,7 @@ module.exports.historicalQuotes = function (url, symbol) {
             }
             else {
 
-                deferred.resolve(false);
+                deferred.reject(err);
             }
 
         });
@@ -122,14 +124,14 @@ module.exports.historicalQuotes = function (url, symbol) {
 // calculates from date for Yahoo feed weekly stocks
 module.exports.getNextDateWeekly = function(row){
 
-    if(row && row[0].DATE){
+    if(row && row.length>0){
 
-      var day = 8 - d[0].date.getDay();
-      return new Date(d.date.getTime() + (86400000 * day));
+      var day = 8 - row[0].date.getDay();
+      return new Date(row[0].date.getTime() + (86400000 * day));
     }
     else{
 
       return  new Date(1980, 0, 29);
-    }
+  }
 
 }
