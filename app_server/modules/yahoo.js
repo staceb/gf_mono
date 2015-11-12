@@ -1,4 +1,5 @@
 ﻿var request = require('request');
+var http = require('http')
 var csv = require('csv-stream');
 var fs = require('fs');
 var Q = require('q');
@@ -64,45 +65,48 @@ module.exports.buildUrl = function (query) {
 module.exports.historicalQuotes = function (url, symbol) {
 
     var deferred = Q.defer();
-    var csvStream = csv.createStream();
     var docs = [];
     var yReq = config.feed;
     yReq.url = url;
 
     if (url && symbol) {
 
-        request( yReq , function (err, res, body) {
+        var docs = [];
+        var csvStream = csv.createStream();
 
+
+        request( yReq , function (err, res, body) {
+            console.log('response:'+res.statusCode)
             if (!err && res.statusCode == 200 && body) {
                 console.log('yahoo done:'+symbol)
-                var data = body.split('\n');
+                // var data = body.split('\n');
+                //
+                // data.shift();
+                //
+                // data.map(function (d) {
+                //
+                //     var doc = d.split(',');
+                //
+                //     if (doc[4] && doc[4] > 0) {
+                //
+                //       docs.unshift([
+                //           symbol,
+                //           doc[0],
+                //           doc[1],
+                //           doc[2],
+                //           doc[3],
+                //           doc[4],
+                //           doc[5],
+                //           doc[6],
+                //           new Date(doc[0]).getMonth(),
+                //           new Date(doc[0]).getFullYear()
+                //       ]);
+                //
+                //     }
+                //
+                // });
 
-                data.shift();
-
-                data.map(function (d) {
-
-                    var doc = d.split(',');
-
-                    if (doc[4] && doc[4] > 0) {
-
-                      docs.unshift([
-                          symbol,
-                          doc[0],
-                          doc[1],
-                          doc[2],
-                          doc[3],
-                          doc[4],
-                          doc[5],
-                          doc[6],
-                          new Date(doc[0]).getMonth(),
-                          new Date(doc[0]).getFullYear()
-                      ]);
-
-                    }
-
-                });
-
-                deferred.resolve(docs);
+                deferred.resolve(body);
             }
             else {
 
@@ -111,6 +115,112 @@ module.exports.historicalQuotes = function (url, symbol) {
 
         });
 
+
+    //    console.log( 'length:'+http.globalAgent.sockets.length )
+      //   var req =  hyperquest.get(url).pipe(csvStream)
+      //   .on('error',function(err){
+      //     console.error(err);
+      //   })
+      // //   .on('data',function(data){
+      // //     // outputs an object containing a set of key/value pair representing a line found in the csv file.
+      // //     //  data.shift()
+      // // //    console.log(data);
+      // //
+      // //   })
+      //   .on('end',function(){
+          // outputs an object containing a set of key/value pair representing a line found in the csv file.
+          //  data.shift()
+      //    console.log(data);
+
+
+        // });
+
+        //
+        //
+        // req.on('data', function (chunk) {
+        //
+        //             var rows = chunk.split('\n');
+        //             rows.shift();
+        //
+        //             rows.map(function (d) {
+        //
+        //                 var doc = d.split(',');
+        //
+        //                 if (doc[4] && doc[4] > 0) {
+        //
+        //                   docs.unshift([
+        //                       symbol,
+        //                       doc[0],
+        //                       doc[1],
+        //                       doc[2],
+        //                       doc[3],
+        //                       doc[4],
+        //                       doc[5],
+        //                       doc[6],
+        //                       new Date(doc[0]).getMonth(),
+        //                       new Date(doc[0]).getFullYear()
+        //                   ]);
+        //
+        //                 }
+        //
+        //             });
+        //    });
+        //
+        // req.on('error', function(err){
+        //   console.log(err);
+        //   deferred.reject(err);
+        //
+        // })
+        //
+        // req.on('end', function(res){
+        //     console.log(symbol);
+        //     deferred.resolve(docs);
+        //
+        // })
+
+      //    request.get( yReq , function (err, res, body) {
+      //   //    console.log(err)
+      // //      console.log(body)
+      //     //  console.log(body)
+      //       if (!err && res.statusCode == 200 && body) {
+      //
+      //           var data = body.split('\n');
+      //
+      //           data.shift();
+      //
+      //           data.map(function (d) {
+      //
+      //               var doc = d.split(',');
+      //
+      //               if (doc[4] && doc[4] > 0) {
+      //
+      //                 docs.unshift([
+      //                     symbol,
+      //                     doc[0],
+      //                     doc[1],
+      //                     doc[2],
+      //                     doc[3],
+      //                     doc[4],
+      //                     doc[5],
+      //                     doc[6],
+      //                     new Date(doc[0]).getMonth(),
+      //                     new Date(doc[0]).getFullYear()
+      //                 ]);
+      //
+      //               }
+      //
+      //           });
+      //
+      //           deferred.resolve(docs);
+      //       }
+      //       else {
+      //           console.log(err)
+      //           deferred.reject(err);
+      //       }
+      //
+      //    });
+
+
     }
     else {
 
@@ -118,20 +228,5 @@ module.exports.historicalQuotes = function (url, symbol) {
     }
 
     return deferred.promise;
-
-}
-
-// calculates from date for Yahoo feed weekly stocks
-module.exports.getNextDateWeekly = function(row){
-
-    if(row && row.length>0){
-
-      var day = 8 - row[0].date.getDay();
-      return new Date(row[0].date.getTime() + (86400000 * day));
-    }
-    else{
-
-      return  new Date(1980, 0, 29);
-  }
 
 }

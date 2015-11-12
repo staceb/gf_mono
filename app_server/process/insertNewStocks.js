@@ -7,26 +7,25 @@ var weeklyGain = require("../modules/stats/weeklyGain.js");
 
 module.exports = function(params){
 
-    console.log('yahoo started:'+params.symbol)
+
     var deferred = Q.defer();
 
-    Q.try(function(){
 
       var url = yahoo.buildUrl(params);
-      return yahoo.historicalQuotes(url, params.symbol);
 
-    })
-    .then(function(d){
-      
-        var prev = d[0];
-        return weeklyGain(d, prev);
-     })
-    .then(function(d){
+      yahoo.historicalQuotes(url, params.symbol)
 
+    // .then(function(d){
+    //
+    //     var prev = d[0];
+    //     return weeklyGain(d, prev);
+    //  })
+    .then(function(d){
+    //    console.log('d:'+d);
           deferred.resolve(d);
     })
     .catch(function(err){
-
+        console.log(err)
         deferred.reject(err);
 
     });

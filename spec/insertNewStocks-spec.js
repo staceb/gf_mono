@@ -4,7 +4,7 @@ var symbol = require('../app_server/db/symbol/symbol.js');
 var insertNew = require('../app_server/process/insertNewStocks.js');
 var mySQL = require('../app_server/db/db');
 var date = require('../app_server/modules/dates.js');
-
+var yahoo = require('../app_server/modules/yahoo.js');
 describe('insertNewStocks', function () {
 
       it("should insert successfully", function (done) {
@@ -17,28 +17,31 @@ describe('insertNewStocks', function () {
             .then(function(c){
 
                 con = c
-              //  return symbol.find.bySymbol(con, 'YHOO');
+          //      return symbol.find.bySymbol(con, 'YHOO');
                 return symbol.find.all(con);
 
             })
             .then(function(d){
 
                 var promises = [];
+
                 console.log(d.length)
                 d.map(function(d, i){
 
                   var deferred = Q.defer();
                   promises.push(deferred.promise);
 
-                  insertNew({symbol: d.SYMBOL, fromDate:d.LAST_DATE , toDate: new Date(), frequency: 'w'})
-                  .then(function(d1){
+                  var url = yahoo.buildUrl({symbol: d.SYMBOL, fromDate:d.LAST_DATE , toDate: new Date(), frequency: 'w'})
 
-                      console.log('returned:'+d.SYMBOL)
-                      deferred.resolve(d);
+                  yahoo.historicalQuotes(url, d.SYMBOL)
+                  .then(function(r){
+
+                      // console.log(r[0][0]);
+                      deferred.resolve(r);
                   })
                   .catch(function(err){
 
-                      console.log('map error for symbol:'+d.SYMBOL);
+                      console.log('error:'+err);
                       deferred.resolve();
                   });
 
@@ -49,7 +52,7 @@ describe('insertNewStocks', function () {
             })
             .then(function(d){
 
-                  console.log(d[0]);
+          //        console.log(d[0]);
                   done();
             })
             .catch(function(err){
