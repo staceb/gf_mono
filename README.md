@@ -6,17 +6,5 @@
 
 **Step 1**
 
-add another comment that pushed this one down
+gg
 
-Add a commit for this line 
-
-
-
-
-
-
-
-
-
-
-Add another change not part of that one 
